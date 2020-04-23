@@ -2,12 +2,21 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import fire from './fire'
+import { connect } from 'react-redux'
+
+
+function mapStateToProps(state) {
+  return {
+    count: state.count
+  }
+}
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages:[]
+      messages:[],
+      count: 0
     }
   }
 
@@ -26,6 +35,22 @@ class App extends Component {
     this.inputEl.value = '';
    }
 
+   increment = () => {
+     this.setState({count: this.state.count + 1})
+   }
+
+   decrement = () => {
+     this.setState({count: this.state.count - 1})
+   }
+
+   increment_redux = () => {
+    this.props.dispatch({type:'INCREMENT'})
+   }
+
+   decrement_redux = () => {
+    this.props.dispatch({type:'DECREMENT'})
+   }
+
   render() {
     return(
       <div className="App">
@@ -36,6 +61,13 @@ class App extends Component {
         </p>
       </header>
       <div>
+      <h2>{this.state.count}</h2>
+      <button onClick={this.increment}>tambah</button>
+      <button onClick={this.decrement}>kurang</button>
+      <p>--------------contoh dibawah pake redux--------------------</p>
+      <h2>{this.props.count}</h2>
+      <button onClick={this.increment_redux}>tambah</button>
+      <button onClick={this.decrement_redux}>kurang</button>
     <h3>React ♥ Firebase Database</h3>
    <form onSubmit={this.addMessage.bind(this)}>
     <input type="text" ref={ el => this.inputEl = el }/>
@@ -53,4 +85,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);
